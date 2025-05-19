@@ -45,12 +45,13 @@ self.addEventListener('fetch', (event) => {
 
 // Tangani push notification
 self.addEventListener('push', function (event) {
-  let title = 'Notifikasi Baru';
-  let options = {
+    let title = 'Notifikasi Baru';
+    let options = {
     body: 'Ada notifikasi dari Aplikasi Cerita.',
-    icon: './images/android-chrome-192x192.png',
-    badge: './images/android-chrome-192x192.png',
-  };
+    icon: `${BASE}images/android-chrome-192x192.png`,
+    badge: `${BASE}images/android-chrome-192x192.png`,
+    };
+
 
   try {
     if (event.data) {
