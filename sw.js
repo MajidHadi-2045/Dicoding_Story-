@@ -27,8 +27,8 @@ if (workbox) {
     { url: `${BASE}styles/styles.css`, revision: '1' },
     { url: `${BASE}scripts/index.js`, revision: '1' },
     { url: `${BASE}scripts/pages/app.js`, revision: '1' },
-    { url: `${BASE}images/android-chrome-192x192.png`, revision: '1' },
-    { url: `${BASE}images/android-chrome-512x512.png`, revision: '1' },
+    { url: `${BASE}images/android192x192.png`, revision: '1' },
+    { url: `${BASE}images/android512x512.png`, revision: '1' },
     { url: `${BASE}404.html`, revision: '1' }
   ], {
     ignoreURLParametersMatching: [/.*/],
