@@ -22,3 +22,26 @@ self.addEventListener('push', function (event) {
     self.registration.showNotification(title, options)
   );
 });
+
+// Menangani klik pada notifikasi
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+
+  const urlToOpen = new URL('/', self.location.origin); // Ganti jika ingin arahkan ke halaman tertentu
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url === urlToOpen.href && 'focus' in client) return client.focus();
+      }
+      if (clients.openWindow) return clients.openWindow(urlToOpen);
+    })
+  );
+});
+
+// Fallback offline
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match('/404.html'))
+  );
+});
