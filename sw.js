@@ -18,11 +18,7 @@ self.addEventListener('push', function (event) {
     options.body = event.data?.text() || options.body;
   }
 
-if (Notification.permission === 'granted') {
   event.waitUntil(
     self.registration.showNotification(title, options)
   );
-} else {
-  console.warn('[SW] Notifikasi tidak diizinkan oleh pengguna');
-}
 });
