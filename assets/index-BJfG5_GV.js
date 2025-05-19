@@ -17,7 +17,7 @@ var B=t=>{throw TypeError(t)};var T=(t,e,a)=>e.has(t)||B("Cannot "+a);var s=(t,e
         <h1 class="about-title">Apakah Kamu Siap Bergambung Bersama Aplikasi Cerita?</h1>
         <div class="about-content">
           <div class="about-image">
-            <img src="dist/images/profil.png" alt="Foto Majid" />
+            <img src="/Dicoding_Story-/images/profil.png" alt="Foto Majid" />
           </div>
           <div class="about-text">
             <h2>Untuk Semua Pengguna</h2>
