@@ -1,3 +1,47 @@
+const CACHE_NAME = 'app-shell-v1';
+const APP_SHELL_FILES = [
+  '/',
+  '/index.html',
+  '/styles/styles.css',
+  '/scripts/index.js',
+  '/images/android-chrome-192x192.png',
+  '/images/android-chrome-512x512.png',
+  '/manifest.webmanifest',
+  '/404.html'
+];
+
+// Cache App Shell saat install
+self.addEventListener('install', (event) => {
+  console.log('[SW] Install');
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL_FILES))
+  );
+});
+
+// Bersihkan cache lama saat activate
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activate');
+  event.waitUntil(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
+      )
+    )
+  );
+});
+
+// Gunakan cache saat offline
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match(event.request).then((res) => {
+      return res || caches.match('/404.html');
+    }))
+  );
+});
+
+// Tangani push notification
 self.addEventListener('push', function (event) {
   let title = 'Notifikasi Baru';
   let options = {
@@ -8,13 +52,12 @@ self.addEventListener('push', function (event) {
 
   try {
     if (event.data) {
-      const raw = event.data.text(); // Ambil data mentah dulu
-      const data = JSON.parse(raw); // Coba parse JSON
+      const raw = event.data.text();
+      const data = JSON.parse(raw);
       title = data.title || title;
       options = { ...options, ...data.options };
     }
   } catch (error) {
-    // Jika bukan JSON atau gagal parsing, isi body tetap pakai teks mentah
     options.body = event.data?.text() || options.body;
   }
 
@@ -23,11 +66,11 @@ self.addEventListener('push', function (event) {
   );
 });
 
-// Menangani klik pada notifikasi
+// Tangani klik pada notifikasi
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
 
-  const urlToOpen = new URL('/', self.location.origin); // Ganti jika ingin arahkan ke halaman tertentu
+  const urlToOpen = new URL('/', self.location.origin);
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
@@ -36,12 +79,5 @@ self.addEventListener('notificationclick', function (event) {
       }
       if (clients.openWindow) return clients.openWindow(urlToOpen);
     })
-  );
-});
-
-// Fallback offline
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    fetch(event.request).catch(() => caches.match('/404.html'))
   );
 });
