@@ -89,8 +89,8 @@ if (workbox) {
       title: 'Aplikasi Cerita',
       options: {
         body: 'Ada cerita baru!',
-        icon: `${BASE}images/android-chrome-192x192.png`,
-        badge: `${BASE}images/android-chrome-192x192.png`,
+        icon: `${BASE}images/android192x192.png`,
+        badge: `${BASE}images/android192x192.png`,
         data: { url: BASE }
       }
     };
