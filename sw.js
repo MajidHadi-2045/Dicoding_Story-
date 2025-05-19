@@ -14,6 +14,7 @@ if (workbox) {
     runtime: 'runtime',
   });
 
+  // ✅ Precache App Shell
   workbox.precaching.precacheAndRoute([
     { url: '/Dicoding_Story-/', revision: '1' },
     { url: '/Dicoding_Story-/index.html', revision: '1' },
@@ -25,17 +26,19 @@ if (workbox) {
     ignoreURLParametersMatching: [/.*/],
   });
 
+  // ✅ Fonts
   workbox.routing.registerRoute(
     ({ url }) => url.origin.includes('fonts.googleapis.com') || url.origin.includes('fonts.gstatic.com'),
     new workbox.strategies.CacheFirst({
       cacheName: 'google-fonts-cache',
       plugins: [
         new workbox.cacheableResponse.CacheableResponsePlugin({ statuses: [0, 200] }),
-        new workbox.expiration.ExpirationPlugin({ maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 })
+        new workbox.expiration.ExpirationPlugin({ maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 }),
       ]
     })
   );
 
+  // ✅ Static files
   workbox.routing.registerRoute(
     ({ request }) => ['style', 'script', 'worker'].includes(request.destination),
     new workbox.strategies.StaleWhileRevalidate({
@@ -43,17 +46,19 @@ if (workbox) {
     })
   );
 
+  // ✅ Images
   workbox.routing.registerRoute(
     ({ request }) => request.destination === 'image',
     new workbox.strategies.CacheFirst({
       cacheName: 'image-cache',
       plugins: [
         new workbox.cacheableResponse.CacheableResponsePlugin({ statuses: [0, 200] }),
-        new workbox.expiration.ExpirationPlugin({ maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 })
+        new workbox.expiration.ExpirationPlugin({ maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 }),
       ]
     })
   );
 
+  // ✅ API Dicoding
   workbox.routing.registerRoute(
     ({ url, request }) =>
       url.origin === 'https://story-api.dicoding.dev' &&
@@ -63,13 +68,13 @@ if (workbox) {
       cacheName: 'dicoding-api-cache',
       plugins: [
         new workbox.cacheableResponse.CacheableResponsePlugin({ statuses: [0, 200] }),
-        new workbox.expiration.ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 })
+        new workbox.expiration.ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 }),
       ]
     })
   );
 
-  // 🔔 PUSH HANDLER — tidak tampilkan notifikasi duplikat
-  self.addEventListener('push', (event) => {
+  // ✅ PUSH HANDLER: Notifikasi muncul sekali, anti spam
+  self.addEventListener('push', async (event) => {
     if (!event.data) return;
 
     let payload;
@@ -84,18 +89,24 @@ if (workbox) {
       };
     }
 
-    if (!payload.title && !payload.options?.body) return;
+    const allClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const isTabVisible = allClients.some(client => client.visibilityState === 'visible');
+
+    if (isTabVisible) {
+      console.log('[SW] Tab aktif, notifikasi tidak ditampilkan.');
+      return;
+    }
 
     const title = payload.title || 'Aplikasi Cerita';
     const options = {
       ...payload.options,
       icon: '/Dicoding_Story-/images/android-chrome-192x192.png',
       badge: '/Dicoding_Story-/images/android-chrome-192x192.png',
-      tag: payload.options?.tag || 'cerita-update',
+      tag: payload.options?.tag || 'story-notif', // 🔑 deduplikasi notifikasi
       renotify: false,
       data: {
-        url: payload.options?.data?.url || '/Dicoding_Story-/'
-      }
+        url: payload.options?.data?.url || '/Dicoding_Story-/',
+      },
     };
 
     event.waitUntil(
@@ -103,9 +114,11 @@ if (workbox) {
     );
   });
 
+  // ✅ Klik notifikasi
   self.addEventListener('notificationclick', (event) => {
     event.notification.close();
     const urlToOpen = event.notification.data?.url || '/Dicoding_Story-/';
+
     event.waitUntil(
       clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientsArr) => {
         for (const client of clientsArr) {
@@ -116,8 +129,17 @@ if (workbox) {
     );
   });
 
+  // ✅ Skip waiting saat update
   self.addEventListener('message', (event) => {
     if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+  });
+
+  // ✅ Offline fallback (404.html)
+  workbox.routing.setCatchHandler(async ({ event }) => {
+    if (event.request.destination === 'document') {
+      return caches.match('/Dicoding_Story-/404.html');
+    }
+    return Response.error();
   });
 
 } else {
