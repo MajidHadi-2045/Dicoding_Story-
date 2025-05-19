@@ -1,13 +1,15 @@
 const CACHE_NAME = 'app-shell-v1';
+const BASE = '/Dicoding_Story/';
+
 const APP_SHELL_FILES = [
-  '/',
-  '/index.html',
-  '/styles/styles.css',
-  '/scripts/index.js',
-  '/images/android-chrome-192x192.png',
-  '/images/android-chrome-512x512.png',
-  '/manifest.webmanifest',
-  '/404.html'
+  `${BASE}`,
+  `${BASE}index.html`,
+  `${BASE}styles/styles.css`,
+  `${BASE}scripts/index.js`,
+  `${BASE}images/android-chrome-192x192.png`,
+  `${BASE}images/android-chrome-512x512.png`,
+  `${BASE}manifest.webmanifest`,
+  `${BASE}404.html`
 ];
 
 // Cache App Shell saat install
@@ -46,8 +48,8 @@ self.addEventListener('push', function (event) {
   let title = 'Notifikasi Baru';
   let options = {
     body: 'Ada notifikasi dari Aplikasi Cerita.',
-    icon: '/images/android-chrome-192x192.png',
-    badge: '/images/android-chrome-192x192.png',
+    icon: './images/android-chrome-192x192.png',
+    badge: './images/android-chrome-192x192.png',
   };
 
   try {
