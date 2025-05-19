@@ -1,0 +1,6 @@
+APP_URL=http://localhost:5173
+MAP_SERVICE_API_KEY=Tidak diperlukan (menggunakan OpenStreetMap)
+Map Services Used:
+- OpenStreetMap
+- OpenTopoMap
+- Stamen Toner
