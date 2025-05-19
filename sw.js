@@ -1,5 +1,3 @@
-// sw.js — tempatkan di /public/
-
 try {
   importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
 } catch (e) {
@@ -9,7 +7,6 @@ try {
 if (workbox) {
   console.log('✅ Workbox berhasil dimuat');
 
-  // Konfigurasi cache
   workbox.core.setCacheNameDetails({
     prefix: 'dicoding-story-app',
     suffix: 'v1',
@@ -17,7 +14,6 @@ if (workbox) {
     runtime: 'runtime',
   });
 
-  // 🔒 Precaching App Shell
   workbox.precaching.precacheAndRoute([
     { url: '/Dicoding_Story-/', revision: '1' },
     { url: '/Dicoding_Story-/index.html', revision: '1' },
@@ -25,13 +21,10 @@ if (workbox) {
     { url: '/Dicoding_Story-/images/android-chrome-192x192.png', revision: '1' },
     { url: '/Dicoding_Story-/images/android-chrome-512x512.png', revision: '1' },
     { url: '/Dicoding_Story-/404.html', revision: '1' }
-], {
+  ], {
     ignoreURLParametersMatching: [/.*/],
   });
 
-  // 📦 Runtime Caching
-
-  // Google Fonts
   workbox.routing.registerRoute(
     ({ url }) => url.origin.includes('fonts.googleapis.com') || url.origin.includes('fonts.gstatic.com'),
     new workbox.strategies.CacheFirst({
@@ -43,7 +36,6 @@ if (workbox) {
     })
   );
 
-  // CSS, JS, Worker
   workbox.routing.registerRoute(
     ({ request }) => ['style', 'script', 'worker'].includes(request.destination),
     new workbox.strategies.StaleWhileRevalidate({
@@ -51,7 +43,6 @@ if (workbox) {
     })
   );
 
-  // Gambar
   workbox.routing.registerRoute(
     ({ request }) => request.destination === 'image',
     new workbox.strategies.CacheFirst({
@@ -63,7 +54,6 @@ if (workbox) {
     })
   );
 
-  // API Dicoding
   workbox.routing.registerRoute(
     ({ url, request }) =>
       url.origin === 'https://story-api.dicoding.dev' &&
@@ -78,38 +68,44 @@ if (workbox) {
     })
   );
 
-  // 🔔 Push Notification
+  // 🔔 PUSH HANDLER — tidak tampilkan notifikasi duplikat
   self.addEventListener('push', (event) => {
-    let data = {
-      title: 'Aplikasi Cerita',
-      options: {
-        body: 'Ada cerita baru!',
-        icon: '/Dicoding_Story-/images/android-chrome-192x192.png',
-        badge: '/Dicoding_Story-/images/android-chrome-192x192.png',
-        data: { url: '/Dicoding_Story-/' }
+    if (!event.data) return;
+
+    let payload;
+    try {
+      payload = event.data.json();
+    } catch (e) {
+      payload = {
+        title: 'Aplikasi Cerita',
+        options: {
+          body: event.data.text() || 'Ada cerita baru!',
+        }
+      };
+    }
+
+    if (!payload.title && !payload.options?.body) return;
+
+    const title = payload.title || 'Aplikasi Cerita';
+    const options = {
+      ...payload.options,
+      icon: '/Dicoding_Story-/images/android-chrome-192x192.png',
+      badge: '/Dicoding_Story-/images/android-chrome-192x192.png',
+      tag: payload.options?.tag || 'cerita-update',
+      renotify: false,
+      data: {
+        url: payload.options?.data?.url || '/Dicoding_Story-/'
       }
     };
 
-    if (event.data) {
-      try {
-        const payload = event.data.json();
-        data.title = payload.title || data.title;
-        data.options = { ...data.options, ...payload.options };
-      } catch (e) {
-        data.options.body = event.data.text();
-      }
-    }
-
     event.waitUntil(
-      self.registration.showNotification(data.title, data.options)
+      self.registration.showNotification(title, options)
     );
   });
 
-  // 🖱️ Klik pada Notifikasi
   self.addEventListener('notificationclick', (event) => {
     event.notification.close();
     const urlToOpen = event.notification.data?.url || '/Dicoding_Story-/';
-
     event.waitUntil(
       clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientsArr) => {
         for (const client of clientsArr) {
@@ -120,11 +116,8 @@ if (workbox) {
     );
   });
 
-  // ⏭️ Optional: update langsung saat ada versi baru
   self.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-      self.skipWaiting();
-    }
+    if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
   });
 
 } else {
