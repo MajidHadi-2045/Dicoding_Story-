@@ -1,4 +1,5 @@
-APP_URL=http://localhost:5173
+APP_URL= http://localhost:5173
+APP_URL_Deploy= https://majidhadi-2045.github.io/Dicoding_Story-
 MAP_SERVICE_API_KEY=Tidak diperlukan (menggunakan OpenStreetMap)
 Map Services Used:
 - OpenStreetMap

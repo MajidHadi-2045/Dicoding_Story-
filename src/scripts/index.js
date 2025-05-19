@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
-  navigator.serviceWorker.register('/sw.js')
+  navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`)
     .then((reg) => {
       console.log('[Service Worker] Terdaftar');
       registerPushNotification(reg);
@@ -26,3 +26,5 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
       console.error('[Service Worker] Gagal:', err);
     });
 }
+
+navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`)

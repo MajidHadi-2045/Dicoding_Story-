@@ -6,13 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "prettier": "^3.5.3",
     "vite": "^6.2.0"
   },
   "dependencies": {
     "leaflet": "^1.9.4"
-  }
+  },
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/MajidHadi-2045/Dicoding_Story-.git"
+}
 }
