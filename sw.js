@@ -17,17 +17,17 @@ if (workbox) {
     runtime: 'runtime',
   });
 
-  const BASE = '/Dicoding_Story-/';
-
   // 🔒 Precaching App Shell
   workbox.precaching.precacheAndRoute([
-    { url: `${BASE}`, revision: '1' },
-    { url: `${BASE}index.html`, revision: '1' },
-    { url: `${BASE}manifest.webmanifest`, revision: '1' },
-    { url: `${BASE}scripts/pages/app.js`, revision: '1' },
-    { url: `${BASE}images/android-chrome-192x192.png`, revision: '1' },
-    { url: `${BASE}images/android-chrome-512x512.png`, revision: '1' },
-    { url: `${BASE}404.html`, revision: '1' }
+    { url: '/Dicoding_Story-/', revision: '1' },
+    { url: '/Dicoding_Story-/index.html', revision: '1' },
+    { url: '/Dicoding_Story-/styles/styles', revision: '1' },
+    { url: '/Dicoding_Story-/manifest.webmanifest', revision: '1' },
+    { url: '/Dicoding_Story-/scripts/index.js', revision: '1' },
+    { url: '/Dicoding_Story-/scripts/pages/app.js', revision: '1' },
+    { url: '/Dicoding_Story-/images/android-chrome-192x192.png', revision: '1' },
+    { url: '/Dicoding_Story-/images/android-chrome-512x512.png', revision: '1' },
+    { url: '/Dicoding_Story-/404.html', revision: '1' }
   ], {
     ignoreURLParametersMatching: [/.*/],
   });
@@ -46,7 +46,7 @@ if (workbox) {
     })
   );
 
-  // CSS, JS
+  // CSS, JS, Worker
   workbox.routing.registerRoute(
     ({ request }) => ['style', 'script', 'worker'].includes(request.destination),
     new workbox.strategies.StaleWhileRevalidate({
@@ -87,9 +87,9 @@ if (workbox) {
       title: 'Aplikasi Cerita',
       options: {
         body: 'Ada cerita baru!',
-        icon: `${BASE}images/android-chrome-192x192.png`,
-        badge: `${BASE}images/android-chrome-192x192.png`,
-        data: { url: BASE }
+        icon: '/Dicoding_Story-/images/android-chrome-192x192.png',
+        badge: '/Dicoding_Story-/images/android-chrome-192x192.png',
+        data: { url: '/Dicoding_Story-/' }
       }
     };
 
@@ -111,7 +111,7 @@ if (workbox) {
   // 🖱️ Klik pada Notifikasi
   self.addEventListener('notificationclick', (event) => {
     event.notification.close();
-    const urlToOpen = event.notification.data?.url || BASE;
+    const urlToOpen = event.notification.data?.url || '/Dicoding_Story-/';
 
     event.waitUntil(
       clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientsArr) => {
@@ -123,7 +123,7 @@ if (workbox) {
     );
   });
 
-  // ⏭️ Optional: untuk update langsung
+  // ⏭️ Optional: update langsung saat ada versi baru
   self.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
       self.skipWaiting();
