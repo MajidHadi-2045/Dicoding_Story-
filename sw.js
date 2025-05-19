@@ -21,7 +21,7 @@ if (workbox) {
   workbox.precaching.precacheAndRoute([
     { url: '/Dicoding_Story-/', revision: '1' },
     { url: '/Dicoding_Story-/index.html', revision: '1' },
-    { url: '/Dicoding_Story-/styles/styles', revision: '1' },
+    { url: '/Dicoding_Story-src/styles/styles', revision: '1' },
     { url: '/Dicoding_Story-/manifest.webmanifest', revision: '1' },
     { url: '/Dicoding_Story-/scripts/index.js', revision: '1' },
     { url: '/Dicoding_Story-/scripts/pages/app.js', revision: '1' },
