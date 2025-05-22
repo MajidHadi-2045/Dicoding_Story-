@@ -89,13 +89,13 @@ if (workbox) {
       };
     }
 
-    const allClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
-    const isTabVisible = allClients.some(client => client.visibilityState === 'visible');
+    // const allClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    // const isTabVisible = allClients.some(client => client.visibilityState === 'visible');
 
-    if (isTabVisible) {
-      console.log('[SW] Tab aktif, notifikasi tidak ditampilkan.');
-      return;
-    }
+    // if (isTabVisible) {
+    //   console.log('[SW] Tab aktif, notifikasi tidak ditampilkan.');
+    //   return;
+    // }
 
     const title = payload.title || 'Aplikasi Cerita';
     const options = {
