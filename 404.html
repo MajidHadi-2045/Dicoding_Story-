@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -7,11 +7,14 @@
       name="description"
       content="Aplikasi Cerita - Platform SPA untuk membagikan cerita berbasis lokasi. Dibangun dengan Vite, Leaflet, dan Dicoding Story API."
     />
-    <link rel="shortcut icon" href="/Dicoding_Story-/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.png" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <title>Dicoding Story</title>
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 
-    <!-- Font Awesome -->
+    <!-- Font Awesome Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -20,29 +23,45 @@
       referrerpolicy="no-referrer"
     />
 
-    <!-- Leaflet -->
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
-    <!-- Manifest PWA -->
-    <link rel="manifest" href="./manifest.webmanifest" />
+    <!-- Tambahan CSS untuk aksesibilitas -->
+    <style>
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#4CAF50" />
-    <link rel="apple-touch-icon" href="/Dicoding_Story-/images/android-chrome-192x192.png" />
-
-    <!-- App styles & script -->
-
-    <title>Dicoding Story</title>
-    <script type="module" crossorigin src="/Dicoding_Story-/assets/index-CSEjzWnZ.js"></script>
-    <link rel="stylesheet" crossorigin href="/Dicoding_Story-/assets/index-D7UNpZ7Q.css">
+    <link rel="apple-touch-icon" href="/images/android192x192.png" />
+    
+    <!-- App Script -->
+    <script type="module" src="/scripts/index.js"></script>
   </head>
 
   <body>
+    <!-- Skip to Main Content -->
     <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
 
+    <!-- Header Navigasi -->
     <header class="site-header" role="banner">
       <div class="main-header container">
         <a class="brand-name" href="#/" id="logo-link">
-          <img src="./images/logo.png" alt="Logo Aplikasi Cerita" class="logo" />
+          <img src="/images/logo.png" alt="Logo Aplikasi Cerita" class="logo" />
           <span class="app-title">Aplikasi Cerita</span>
         </a>
 
@@ -50,7 +69,6 @@
           <ul id="nav-list" class="nav-list">
             <li><a href="#/">Beranda</a></li>
             <li><a href="#/add">Tambah Cerita</a></li>
-            <li><a href="#/favorites">Favorit</a></li>
             <li><a href="#/about">Tentang</a></li>
             <li id="auth-nav"><a href="#/login">Login</a></li>
           </ul>
@@ -62,11 +80,13 @@
       </div>
     </header>
 
+    <!-- Konten Utama -->
     <main id="main-content" class="main-content" tabindex="-1" role="main">
       <h1 class="visually-hidden">Aplikasi Cerita - Beranda</h1>
-      <!-- Konten SPA akan ditampilkan di sini -->
+      <!-- SPA content will be injected here -->
     </main>
 
+    <!-- Modal Detail -->
     <section
       id="story-modal"
       class="modal"
@@ -80,20 +100,16 @@
         <button class="modal-close" aria-label="Tutup detail cerita">&times;</button>
         <img id="modal-img" src="" alt="Gambar cerita lengkap" />
         <div class="modal-text">
-          <h2 id="modal-name">Nama</h2>
+          <h3 id="modal-name">Nama</h3>
           <p id="modal-desc">Deskripsi</p>
           <small id="modal-date">Tanggal</small>
         </div>
       </div>
     </section>
 
+    <!-- Footer -->
     <footer class="site-footer" role="contentinfo">
-      <div class="container">
-        <button id="toggle-push-btn" class="push-toggle-btn" aria-label="Toggle notifikasi">
-          <i class="fa-solid fa-bell"></i> Aktifkan Notifikasi
-        </button>
-        <p>&copy; 2025 Aplikasi Cerita. Dibuat oleh programmer magang.</p>
-      </div>
+      <p>&copy; 2025 Aplikasi Cerita. Dibuat oleh programmer magang</p>
     </footer>
   </body>
 </html>
